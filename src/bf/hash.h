@@ -3,9 +3,18 @@
 
 #include <functional>
 #include <bf/h3.h>
+#include <bf/murmur3.h>
+#include <bf/murmur3_64bit.h>
 #include <bf/object.h>
 
 namespace bf {
+
+// The hash kinds
+enum bf_hash_kind {
+    HASH_KIND_H3,
+    HASH_KIND_MURMUR3,
+    HASH_KIND_MURMUR3_64BIT
+};
 
 /// The hash digest type.
 typedef size_t digest;
@@ -27,6 +36,28 @@ public:
 
 private:
   h3<size_t, max_obj_size> h3_;
+};
+
+class murmur3_hash_function
+{
+public:
+  murmur3_hash_function(size_t seed);
+
+  size_t operator()(object const& o) const;
+
+private:
+  murmur3<size_t> murmur3_;
+};
+
+class murmur3_64bit_hash_function
+{
+public:
+  murmur3_64bit_hash_function(size_t seed);
+
+  size_t operator()(object const& o) const;
+
+private:
+  murmur3_64bit<size_t> murmur3_64bit_;
 };
 
 /// A hasher which hashes an object *k* times.
@@ -69,7 +100,7 @@ private:
 /// @return A ::hasher with the *k* hash functions.
 ///
 /// @pre `k > 0`
-hasher make_hasher(size_t k, size_t seed = 0, bool double_hashing = false);
+hasher make_hasher(size_t k, size_t seed = 0, bool double_hashing = false, bf_hash_kind hash_kind = HASH_KIND_H3);
 
 } // namespace bf
 

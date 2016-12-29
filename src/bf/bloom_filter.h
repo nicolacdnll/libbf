@@ -2,6 +2,7 @@
 #define BF_BLOOM_FILTER_H
 
 #include <bf/wrap.h>
+// #include <bf/hash.h> // digest
 
 namespace bf {
 
@@ -38,10 +39,17 @@ public:
     return lookup(wrap(x));
   }
 
+  template <typename T>
+  size_t lookup_and_add(T const& x)
+  {
+    return lookup_and_add(wrap(x));
+  }
+
   /// Retrieves the count of an element.
   /// @param o A wrapped object.
   /// @return A frequency estimate for *o*.
   virtual size_t lookup(object const& o) const = 0;
+  virtual size_t lookup_and_add(object const& o) = 0;
 
   /// Removes all items from the Bloom filter.
   virtual void clear() = 0;

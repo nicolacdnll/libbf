@@ -1,7 +1,8 @@
 #include <bf/hash.h>
 
 #include <cassert>
-
+#include<iostream>
+using namespace std;
 namespace bf {
 
 default_hash_function::default_hash_function(size_t seed)
@@ -16,6 +17,26 @@ size_t default_hash_function::operator()(object const& o) const
   if (o.size() > max_obj_size)
     throw std::runtime_error("object too large");
   return o.size() == 0 ? 0 : h3_(o.data(), o.size());
+}
+
+murmur3_hash_function::murmur3_hash_function(size_t seed)
+  : murmur3_(seed)
+{
+}
+
+size_t murmur3_hash_function::operator()(object const& o) const
+{
+  return murmur3_ (o.data(), o.size());
+}
+
+murmur3_64bit_hash_function::murmur3_64bit_hash_function(size_t seed)
+  : murmur3_64bit_(seed)
+{
+}
+
+size_t murmur3_64bit_hash_function::operator()(object const& o) const
+{
+  return murmur3_64bit_ (o.data());
 }
 
 default_hasher::default_hasher(std::vector<hash_function> fns)
@@ -49,21 +70,50 @@ std::vector<digest> double_hasher::operator()(object const& o) const
   return d;
 }
 
-hasher make_hasher(size_t k, size_t seed, bool double_hashing)
+hasher make_hasher(size_t k, size_t seed, bool double_hashing, bf_hash_kind hash_kind)
 {
   assert(k > 0);
   std::minstd_rand0 prng(seed);
   if (double_hashing)
   {
-    auto h1 = default_hash_function(prng());
-    auto h2 = default_hash_function(prng());
+    // Use H3 hash function with random seeds
+    // auto h1 = default_hash_function(prng());
+    // auto h2 = default_hash_function(prng());
+    hash_function h1, h2;
+    switch (hash_kind) {
+        case HASH_KIND_MURMUR3_64BIT:
+            h1 = murmur3_64bit_hash_function(0);
+            h2 = murmur3_64bit_hash_function(1);
+            break;
+        case HASH_KIND_MURMUR3:
+            h1 = murmur3_hash_function(0);
+            h2 = murmur3_hash_function(1);
+            break;
+        case HASH_KIND_H3:
+        default:
+            h1 = default_hash_function(prng());
+            h2 = default_hash_function(prng());
+
+    }
     return double_hasher(k, std::move(h1), std::move(h2));
   }
   else
   {
     std::vector<hash_function> fns(k);
-    for (size_t i = 0; i < k; ++i)
-      fns[i] = default_hash_function(prng());
+    for (size_t i = 0; i < k; ++i) {
+        // fns[i] = default_hash_function(prng());
+        switch (hash_kind) {
+            case HASH_KIND_MURMUR3_64BIT:
+                fns[i] = murmur3_64bit_hash_function(i);
+                break;
+            case HASH_KIND_MURMUR3:
+                fns[i] = murmur3_hash_function(i);
+                break;
+            case HASH_KIND_H3:
+            default:
+                fns[i] = default_hash_function(prng());
+        }
+    }
     return default_hasher(std::move(fns));
   }
 }

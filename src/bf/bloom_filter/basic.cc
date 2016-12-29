@@ -25,13 +25,14 @@ basic_bloom_filter::basic_bloom_filter(hasher h, size_t cells, bool partition)
 }
 
 basic_bloom_filter::basic_bloom_filter(double fp, size_t capacity, size_t seed,
-                                       bool double_hashing, bool partition)
+                                       bool double_hashing, bool partition,
+                                       bf_hash_kind hash_kind)
   : partition_(partition)
 {
   auto required_cells = m(fp, capacity);
   auto optimal_k = k(required_cells, capacity);
   bits_.resize(required_cells);
-  hasher_ = make_hasher(optimal_k, seed, double_hashing);
+  hasher_ = make_hasher(optimal_k, seed, double_hashing, hash_kind);
 }
 
 basic_bloom_filter::basic_bloom_filter(basic_bloom_filter&& other)
@@ -76,6 +77,15 @@ size_t basic_bloom_filter::lookup(object const& o) const
   }
 
   return 1;
+}
+
+size_t basic_bloom_filter::lookup_and_add (object const& o)
+{
+    size_t found = lookup (o);
+    if ( !found ) {
+        add (o);
+    }
+    return found;
 }
 
 void basic_bloom_filter::clear()

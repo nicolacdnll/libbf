@@ -65,4 +65,4 @@ private:
 
 } // namespace bf
 
-#endif 
+#endif

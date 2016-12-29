@@ -57,15 +57,18 @@ public:
   ///
   /// @param partition Whether to partition the bit vector per hash function.
   basic_bloom_filter(double fp, size_t capacity, size_t seed = 0,
-                     bool double_hashing = true, bool partition = true);
+                     bool double_hashing = true, bool partition = true,
+                     bf_hash_kind hash_kind = HASH_KIND_H3);
 
   basic_bloom_filter(basic_bloom_filter&&);
 
   using bloom_filter::add;
   using bloom_filter::lookup;
+  using bloom_filter::lookup_and_add;
 
   virtual void add(object const& o) override;
   virtual size_t lookup(object const& o) const override;
+  virtual size_t lookup_and_add(object const& o) override;
   virtual void clear() override;
 
   /// Removes an object from the Bloom filter.
