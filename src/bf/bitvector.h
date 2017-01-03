@@ -17,7 +17,7 @@ public:
   typedef size_t block_type;
   typedef size_t size_type;
   static size_type constexpr npos = static_cast<size_type>(-1);
-  static block_type constexpr bits_per_block = 
+  static block_type constexpr bits_per_block =
     std::numeric_limits<block_type>::digits;
 
 public:
@@ -189,7 +189,7 @@ public:
   /// @return A reference to the bit vector instance.
   bitvector& flip(size_type i);
 
-  /// Computes the complement 
+  /// Computes the complement
   /// @return A reference to the bit vector instance.
   bitvector& flip();
 
@@ -215,6 +215,15 @@ public:
   /// Retrieves the number of bits the bitvector consist of.
   /// @return The length of the bit vector in bits.
   size_type size() const;
+
+  /// Retrieves the number of bytes needed to store all the blocks when dumping.
+  /// @return The lenght of the bit vector in bites.
+  size_type dump_size() const;
+
+  /// Dumps the bits to a destination location.
+  /// To avoid overflows, the size of the array pointed to by the destination
+  /// shall be at least dump_size() bytes.
+  void dump(void * destination) const;
 
   /// Checks whether the bit vector is empty.
   /// @return `true` iff the bitvector has zero length.
@@ -259,7 +268,7 @@ private:
   /// @return The number of blocks to represent *bits* number of bits.
   static size_type constexpr bits_to_blocks(size_type bits)
   {
-    return bits / bits_per_block 
+    return bits / bits_per_block
       + static_cast<size_type>(bits % bits_per_block != 0);
   }
 

@@ -1,5 +1,6 @@
 #include <bf/bitvector.h>
 
+#include <string.h>
 #include <cassert>
 
 namespace bf {
@@ -63,7 +64,7 @@ bitvector::reference& bitvector::reference::operator=(reference const& other)
 
 bitvector::reference& bitvector::reference::operator|=(bool x)
 {
-  if (x) 
+  if (x)
     block_ |= mask_;
   return *this;
 }
@@ -74,7 +75,7 @@ bitvector::reference& bitvector::reference::operator&=(bool x)
     block_ &= ~mask_;
   return *this;
 }
-    
+
 bitvector::reference& bitvector::reference::operator^=(bool x)
 {
   if (x)
@@ -424,6 +425,16 @@ size_type bitvector::blocks() const
 size_type bitvector::size() const
 {
   return num_bits_;
+}
+
+size_type bitvector::dump_size() const
+{
+  return blocks()*sizeof(block_type);
+}
+
+void bitvector::dump(void * destination) const
+{
+  memcpy (destination, &bits_[0], bits_.size()*sizeof(block_type) );
 }
 
 bool bitvector::empty() const
