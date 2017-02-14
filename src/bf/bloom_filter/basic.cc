@@ -58,6 +58,24 @@ void basic_bloom_filter::add(object const& o)
   }
 }
 
+void basic_bloom_filter::prefetch(object const& o)
+{
+  auto digests = hasher_(o);
+  assert(bits_.size() % digests.size() == 0);
+  if (partition_)
+  {
+    auto parts = bits_.size() / digests.size();
+    for (size_t i = 0; i < digests.size(); ++i)
+      bits_.prefetch(i * parts + (digests[i] % parts));
+
+  }
+  else
+  {
+    for (auto d : digests)
+      bits_.prefetch(d % bits_.size());
+  }
+}
+
 size_t basic_bloom_filter::lookup(object const& o) const
 {
   auto digests = hasher_(o);

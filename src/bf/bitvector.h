@@ -225,6 +225,11 @@ public:
   /// shall be at least dump_size() bytes.
   void dump(void * destination) const;
 
+  /// Prefetch the element of bits_ where the single bit belongs.
+  /// @param i The bit position.
+  /// @return A mutable reference to the bit at position *i*.
+  void prefetch(size_type i) const;
+
   /// Checks whether the bit vector is empty.
   /// @return `true` iff the bitvector has zero length.
   bool empty() const;

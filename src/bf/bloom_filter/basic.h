@@ -63,10 +63,12 @@ public:
   basic_bloom_filter(basic_bloom_filter&&);
 
   using bloom_filter::add;
+  using bloom_filter::prefetch;
   using bloom_filter::lookup;
   using bloom_filter::lookup_and_add;
 
   virtual void add(object const& o) override;
+  virtual void prefetch(object const& o) override;
   virtual size_t lookup(object const& o) const override;
   virtual size_t lookup_and_add(object const& o) override;
   virtual void clear() override;

@@ -437,6 +437,11 @@ void bitvector::dump(void * destination) const
   memcpy (destination, &bits_[0], bits_.size()*sizeof(block_type) );
 }
 
+void bitvector::prefetch(size_type i) const
+{
+  __builtin_prefetch (&(bits_[block_index(i)]),1/*0 to write*/,0/*no temporal locality*/);
+}
+
 bool bitvector::empty() const
 {
   return bits_.empty();

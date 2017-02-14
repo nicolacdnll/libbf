@@ -29,6 +29,19 @@ public:
   /// @param o A wrapped object.
   virtual void add(object const& o) = 0;
 
+  /// Prefetch into cache the bits that rappresent an object.
+  /// @tparam T The type of the element to prefetch.
+  /// @param x An instance of type `T`.
+  template <typename T>
+  void prefetch(T const& x)
+  {
+    prefetch(wrap(x));
+  }
+
+  /// Prefetch into cache the bits that rappresent an object.
+  /// @param o A wrapped object.
+  virtual void prefetch(object const& o) = 0;
+
   /// Retrieves the count of an element.
   /// @tparam T The type of the element to query.
   /// @param x An instance of type `T`.
