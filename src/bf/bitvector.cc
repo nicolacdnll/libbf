@@ -437,6 +437,30 @@ void bitvector::dump(void * destination) const
   memcpy (destination, &bits_[0], bits_.size()*sizeof(block_type) );
 }
 
+bool bitvector::serialize(std::string file) const
+{
+  bool return_value = true;
+  std::ofstream os (file, std::ios::out | std::ios::binary | std::ios::trunc);
+  os.write ((char *)&bits_[0], sizeof(block_type)*bits_.size());
+  if (!os) {
+      return_value = false;
+  }
+  os.close();
+  return return_value;
+}
+
+bool bitvector::unserialize(std::string file) const
+{
+    bool return_value = true;
+    std::ifstream is (file, std::ios::in | std::ios::binary);
+    is.read ((char *)&bits_[0], bits_.size()*sizeof(block_type));
+    if (!is) {
+        return_value = false;
+    }
+    is.close();
+    return return_value;
+}
+
 void bitvector::prefetch(size_type i) const
 {
   __builtin_prefetch (&(bits_[block_index(i)]),1/*0 to write*/,0/*no temporal locality*/);

@@ -5,6 +5,7 @@
 #include <limits>
 #include <string>
 #include <vector>
+#include <fstream>
 
 namespace bf {
 
@@ -224,6 +225,16 @@ public:
   /// To avoid overflows, the size of the array pointed to by the destination
   /// shall be at least dump_size() bytes.
   void dump(void * destination) const;
+
+  /// Serializes the bitvector to a file.
+  /// @param file The absolute path of the file.
+  /// @return False if something went wrong, true otherwise.
+  bool serialize(std::string file) const;
+
+  /// Unserializes the bitvector from a file.
+  /// @param file The absolute path of the file.
+  /// @return False if something went wrong, true otherwise.
+  bool unserialize(std::string file) const;
 
   /// Prefetch the element of bits_ where the single bit belongs.
   /// @param i The bit position.
