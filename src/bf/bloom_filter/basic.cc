@@ -99,11 +99,22 @@ size_t basic_bloom_filter::lookup(object const& o) const
 
 size_t basic_bloom_filter::lookup_and_add (object const& o)
 {
-    size_t found = lookup (o);
-    if ( !found ) {
-        add (o);
+    bool return_value = 1;
+    auto digests = hasher_(o);
+    assert(bits_.size() % digests.size() == 0);
+    if (partition_)
+    {
+      auto parts = bits_.size() / digests.size();
+      for (size_t i = 0; i < digests.size(); ++i)
+        return_value &= bits_.set_getold(i * parts + (digests[i] % parts));
     }
-    return found;
+    else
+    {
+      for (auto d : digests)
+        return_value &= bits_.set_getold(d % bits_.size());
+    }
+
+    return return_value;
 }
 
 void basic_bloom_filter::clear()

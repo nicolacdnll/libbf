@@ -172,6 +172,11 @@ public:
   /// @return A reference to the bit vector instance.
   bitvector& set(size_type i, bool bit = true);
 
+  /// Sets a bit at a specific position to a given value.
+  /// @param i The bit position.
+  /// @return The old value of the bit.
+  bool set_getold(size_type i);
+
   /// Sets all bits to 1.
   /// @return A reference to the bit vector instance.
   bitvector& set();

@@ -350,6 +350,14 @@ bitvector& bitvector::set(size_type i, bool bit)
   return *this;
 }
 
+bool bitvector::set_getold (size_type i)
+{
+  assert(i < num_bits_);
+  bool return_value = bits_[block_index(i)] & bit_mask(i);
+  bits_[block_index(i)] |= bit_mask(i);
+  return return_value;
+}
+
 bitvector& bitvector::set()
 {
   std::fill(bits_.begin(), bits_.end(), ~block_type(0));
