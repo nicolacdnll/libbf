@@ -1,15 +1,18 @@
-**libbf** is a C++11 library which implements [various Bloom
+**libbf** is a C++11 library which implements [~~various~~ Bloom
 filters][blog-post], including:
 
 - Basic
-- Counting
-- Spectral MI
-- Spectral RM
-- Bitwise
-- A^2
-- Stable
+- ~~Counting~~
+- ~~Spectral MI~~
+- ~~Spectral RM~~
+- ~~Bitwise~~
+- ~~A^2~~
+- ~~Stable~~
 
 [blog-post]: http://matthias.vallentin.net/blog/2011/06/a-garden-variety-of-bloom-filters/
+
+###### NOTE:
+> This particular branch is all about extending the functionality of the Basic filter for a peculiar use case. Thus other filters are, so far, not supported.
 
 Synopsis
 ========
