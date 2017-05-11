@@ -87,7 +87,16 @@ public:
   /// Returns the underlying storage of the Bloom filter.
   bitvector const& storage() const;
 
+  /// Returns the number of functions for this Bloom filter.
+  /// @return The number of functions for this Bloom filter.
+  unsigned int k() const;
+
+  /// Returns the Returns the number of cells of this Bloom filter.
+  /// @return The number of cells of this Bloom filter.
+  size_t m() const;
+
 private:
+  unsigned int k_;
   hasher hasher_;
   bitvector bits_;
   bool partition_;

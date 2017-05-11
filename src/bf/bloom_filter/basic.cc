@@ -33,6 +33,7 @@ basic_bloom_filter::basic_bloom_filter(double fp, size_t capacity, size_t seed,
   auto optimal_k = k(required_cells, capacity);
   bits_.resize(required_cells);
   hasher_ = make_hasher(optimal_k, seed, double_hashing, hash_kind);
+  k_ = optimal_k;
 }
 
 basic_bloom_filter::basic_bloom_filter(basic_bloom_filter&& other)
@@ -138,6 +139,18 @@ void basic_bloom_filter::swap(basic_bloom_filter& other)
 bitvector const& basic_bloom_filter::storage() const
 {
   return bits_;
+}
+
+/// Returns the number of functions for this Bloom filter.
+/// @return The number of functions for this Bloom filter.
+unsigned int basic_bloom_filter::k() const{
+  return k_;
+}
+
+// / Returns the Returns the number of cells of this Bloom filter.
+// / @return The number of cells of this Bloom filter.
+size_t basic_bloom_filter::m() const{
+  return bits_.size();
 }
 
 } // namespace bf
