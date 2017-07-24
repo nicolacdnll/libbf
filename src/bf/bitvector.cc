@@ -445,7 +445,7 @@ void bitvector::dump(void * destination) const
   memcpy (destination, &bits_[0], bits_.size()*sizeof(block_type) );
 }
 
-bool bitvector::serialize(std::string file) const
+bool bitvector::serialize(const std::string &file) const
 {
   bool return_value = true;
   std::ofstream os (file, std::ios::out | std::ios::binary | std::ios::trunc);
@@ -457,7 +457,7 @@ bool bitvector::serialize(std::string file) const
   return return_value;
 }
 
-bool bitvector::unserialize(std::string file) const
+bool bitvector::unserialize(const std::string &file) const
 {
     bool return_value = true;
     std::ifstream is (file, std::ios::in | std::ios::binary);
