@@ -234,12 +234,12 @@ public:
   /// Serializes the bitvector to a file.
   /// @param file The absolute path of the file.
   /// @return False if something went wrong, true otherwise.
-  bool serialize(std::string file) const;
+  bool serialize(const std::string &file) const;
 
   /// Unserializes the bitvector from a file.
   /// @param file The absolute path of the file.
   /// @return False if something went wrong, true otherwise.
-  bool unserialize(std::string file) const;
+  bool unserialize(const std::string &file) const;
 
   /// Prefetch the element of bits_ where the single bit belongs.
   /// @param i The bit position.
